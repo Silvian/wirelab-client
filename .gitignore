@@ -133,3 +133,6 @@ dmypy.json
 .idea/*
 *.idea
 *.idea/*
+
+# Ignore JSON config files
+*.json
