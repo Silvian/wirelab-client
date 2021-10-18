@@ -3,11 +3,13 @@ import boto3
 import json
 
 from time import sleep
+import RPi.GPIO as GPIO
 
 import settings
 
-from utils.config import Config
 from controllers import raspberrypi
+from utils.config import Config
+from utils.init import ServiceAvailability
 
 
 def sqs_client():
@@ -19,6 +21,20 @@ def sqs_client():
         aws_secret_access_key=settings.AWS_SECRET_KEY,
     )
     return sqs
+
+
+def start():
+    service = ServiceAvailability()
+    config_file = Config()
+    for device in config_file.load().get("devices"):
+        service.status_update(device["id"], True)
+
+
+def stop():
+    service = ServiceAvailability()
+    config_file = Config()
+    for device in config_file.load().get("devices"):
+        service.status_update(device["id"], False)
 
 
 def main():
@@ -69,4 +85,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        start()
+        main()
+    except Exception:
+        stop()
+        GPIO.cleanup()
