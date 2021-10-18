@@ -21,55 +21,49 @@ def sqs_client():
     return sqs
 
 
-def process_sqs_message(sqs):
-    """Receive message from SQS queue"""
-    response = sqs.receive_message(
-        QueueUrl=settings.AWS_QUEUE,
-        AttributeNames=[
-            'SentTimestamp'
-        ],
-        MaxNumberOfMessages=1,
-        MessageAttributeNames=[
-            'All'
-        ],
-        VisibilityTimeout=0,
-        WaitTimeSeconds=20
-    )
-
-    if "Messages" in response:
-        message = response['Messages'][0]
-        receipt_handle = message['ReceiptHandle']
-        message_body = json.loads(message["Body"])
-
-        # Delete received message from queue
-        sqs.delete_message(
-            QueueUrl=settings.AWS_QUEUE,
-            ReceiptHandle=receipt_handle
-        )
-
-        return message_body
-
-
 def main():
     sqs = sqs_client()
     config_file = Config()
 
     while True:
-        message = process_sqs_message(sqs)
         config = config_file.load()
         devices = config.get("devices")
 
-        for device in devices:
-            if device["id"] == message.get("device_id"):
-                switch = device["switch"]
-                if switch == 1:
-                    raspberrypi.switch_one(message.get("state"))
-                elif switch == 2:
-                    raspberrypi.switch_two(message.get("state"))
-                elif switch == 3:
-                    raspberrypi.switch_three(message.get("state"))
-                elif switch == 4:
-                    raspberrypi.switch_four(message.get("state"))
+        response = sqs.receive_message(
+            QueueUrl=settings.AWS_QUEUE,
+            AttributeNames=[
+                'SentTimestamp'
+            ],
+            MaxNumberOfMessages=1,
+            MessageAttributeNames=[
+                'All'
+            ],
+            VisibilityTimeout=0,
+            WaitTimeSeconds=20
+        )
+
+        if "Messages" in response:
+            message = response['Messages'][0]
+            receipt_handle = message['ReceiptHandle']
+            message_body = json.loads(message["Body"])
+
+            # Delete received message from queue
+            sqs.delete_message(
+                QueueUrl=settings.AWS_QUEUE,
+                ReceiptHandle=receipt_handle
+            )
+
+            for device in devices:
+                if device["id"] == message_body.get("device_id"):
+                    switch = device["switch"]
+                    if switch == 1:
+                        raspberrypi.switch_one(message_body.get("state"))
+                    elif switch == 2:
+                        raspberrypi.switch_two(message_body.get("state"))
+                    elif switch == 3:
+                        raspberrypi.switch_three(message_body.get("state"))
+                    elif switch == 4:
+                        raspberrypi.switch_four(message_body.get("state"))
 
         sleep(1)
 
