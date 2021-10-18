@@ -98,7 +98,7 @@ if __name__ == "__main__":
     try:
         start()
         main()
-    except Exception:
+    except BaseException:
         pass
 
     signal.signal(signal.SIGINT, sigint_handler)
