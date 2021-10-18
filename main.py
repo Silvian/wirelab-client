@@ -1,5 +1,4 @@
 """Wirelab Client Main App."""
-import signal
 import sys
 
 import boto3
@@ -99,4 +98,7 @@ if __name__ == "__main__":
         start()
         main()
     except BaseException:
-        signal.signal(signal.SIGINT, sigint_handler)
+        print("Exiting gracefully...")
+        stop()
+        GPIO.cleanup()
+        sys.exit(0)
