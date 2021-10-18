@@ -59,17 +59,17 @@ def main():
         config = config_file.load()
         devices = config.get("devices")
 
-        device = devices.get(message.get("device_id"))
-        if device:
-            switch = device["switch"]
-            if switch == 1:
-                raspberrypi.switch_one(message.get("state"))
-            elif switch == 2:
-                raspberrypi.switch_two(message.get("state"))
-            elif switch == 3:
-                raspberrypi.switch_three(message.get("state"))
-            elif switch == 4:
-                raspberrypi.switch_four(message.get("state"))
+        for device in devices:
+            if device["id"] == message.get("device_id"):
+                switch = device["switch"]
+                if switch == 1:
+                    raspberrypi.switch_one(message.get("state"))
+                elif switch == 2:
+                    raspberrypi.switch_two(message.get("state"))
+                elif switch == 3:
+                    raspberrypi.switch_three(message.get("state"))
+                elif switch == 4:
+                    raspberrypi.switch_four(message.get("state"))
 
         sleep(1)
 
