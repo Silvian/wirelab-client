@@ -99,6 +99,4 @@ if __name__ == "__main__":
         start()
         main()
     except BaseException:
-        pass
-
-    signal.signal(signal.SIGINT, sigint_handler)
+        signal.signal(signal.SIGINT, sigint_handler)
