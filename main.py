@@ -1,4 +1,7 @@
 """Wirelab Client Main App."""
+import signal
+import sys
+
 import boto3
 import json
 
@@ -35,6 +38,13 @@ def stop():
     config_file = Config()
     for device in config_file.load().get("devices"):
         service.status_update(device["id"], False)
+
+
+def sigint_handler(signal, frame):
+    print("Exiting gracefully...")
+    stop()
+    GPIO.cleanup()
+    sys.exit(0)
 
 
 def main():
@@ -89,5 +99,6 @@ if __name__ == "__main__":
         start()
         main()
     except Exception:
-        stop()
-        GPIO.cleanup()
+        pass
+
+    signal.signal(signal.SIGINT, sigint_handler)
