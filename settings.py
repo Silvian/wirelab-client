@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 # load_dotenv will look for a .env file and if it finds one
 # it will load the environment variables from it
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 load_dotenv()
 
 # AWS QUEUE
