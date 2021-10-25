@@ -1,3 +1,6 @@
+import signal
+import time
+
 import requests
 
 import settings
@@ -28,3 +31,14 @@ class ServiceAvailability:
         ).json()
 
         return response
+
+
+class SignalHandler:
+    kill = False
+
+    def __init__(self):
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+    def exit_gracefully(self, *args):
+        self.kill = True

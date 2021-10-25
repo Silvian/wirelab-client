@@ -11,7 +11,7 @@ import settings
 
 from controllers import raspberrypi
 from utils.config import Config
-from utils.init import ServiceAvailability
+from utils.init import ServiceAvailability, SignalHandler
 
 
 def sqs_client():
@@ -49,8 +49,9 @@ def sigint_handler(signal, frame):
 def main():
     sqs = sqs_client()
     config_file = Config()
+    handler = SignalHandler()
 
-    while True:
+    while not handler.kill:
         config = config_file.load()
         devices = config.get("devices")
 
@@ -94,11 +95,8 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        start()
-        main()
-    except BaseException:
-        print("Exiting gracefully...")
-        stop()
-        GPIO.cleanup()
-        sys.exit(0)
+    start()
+    main()
+    stop()
+    GPIO.cleanup()
+    sys.exit(0)
