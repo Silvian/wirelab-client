@@ -39,13 +39,6 @@ def stop():
         service.status_update(device["id"], False)
 
 
-def sigint_handler(signal, frame):
-    print("Exiting gracefully...")
-    stop()
-    GPIO.cleanup()
-    sys.exit(0)
-
-
 def main():
     sqs = sqs_client()
     config_file = Config()
