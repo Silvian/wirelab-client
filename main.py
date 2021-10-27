@@ -1,10 +1,11 @@
 """Wirelab Client Main App."""
+import asyncio
 import sys
 
 import boto3
 import json
 
-from time import sleep
+from asyncio import sleep
 import RPi.GPIO as GPIO
 
 import settings
@@ -29,25 +30,24 @@ def start():
     service = ServiceAvailability()
     config_file = Config()
     for device in config_file.load().get("devices"):
-        service.status_update(device["id"], True)
+        service.status_update(device["id"], active=True)
 
 
 def stop():
     service = ServiceAvailability()
     config_file = Config()
     for device in config_file.load().get("devices"):
-        service.status_update(device["id"], False)
+        service.status_update(device["id"], active=False)
 
 
-def main():
+async def main():
     sqs = sqs_client()
     config_file = Config()
+    config = config_file.load()
+    devices = config.get("devices")
     handler = SignalHandler()
 
     while not handler.kill:
-        config = config_file.load()
-        devices = config.get("devices")
-
         response = sqs.receive_message(
             QueueUrl=settings.AWS_QUEUE,
             AttributeNames=[
@@ -76,20 +76,28 @@ def main():
                 if device["id"] == message_body.get("device_id"):
                     switch = device["switch"]
                     if switch == 1:
-                        raspberrypi.switch_one(message_body.get("state"))
+                        asyncio.create_task(
+                            raspberrypi.switch_one(device["id"], message_body.get("state"))
+                        )
                     elif switch == 2:
-                        raspberrypi.switch_two(message_body.get("state"))
+                        asyncio.create_task(
+                            raspberrypi.switch_two(device["id"], message_body.get("state"))
+                        )
                     elif switch == 3:
-                        raspberrypi.switch_three(message_body.get("state"))
+                        asyncio.create_task(
+                            raspberrypi.switch_three(device["id"], message_body.get("state"))
+                        )
                     elif switch == 4:
-                        raspberrypi.switch_four(message_body.get("state"))
+                        asyncio.create_task(
+                            raspberrypi.switch_four(device["id"], message_body.get("state"))
+                        )
 
-        sleep(1)
+        await sleep(1)
 
 
 if __name__ == "__main__":
     start()
-    main()
+    asyncio.run(main())
     stop()
     GPIO.cleanup()
     sys.exit(0)
