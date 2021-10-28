@@ -18,6 +18,9 @@ AWS_REGION_NAME = os.getenv("AWS_REGION_NAME", default="eu-west-1")
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY", default="AWS_ACCESS_KEY")
 AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY", default="AWS_SECRET_KEY")
 
+# Devices configurations
+DEVICES_URL = os.getenv("DEVICES_URL", default="https://example.com/list-devices")
+
 # Webhook configurations
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", default="https://example.com/webhook")
 WEBHOOK_KEY = os.getenv("WEBHOOK_KEY", default="secret-key")
