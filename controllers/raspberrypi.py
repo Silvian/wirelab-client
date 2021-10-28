@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 
-from asyncio import sleep
+from asyncio import create_task, sleep
 
 from controllers.constants import ON, OFF
 from utils.init import ServiceAvailability
@@ -40,7 +40,26 @@ GPIO.output(13, False)
 service = ServiceAvailability()
 
 
-async def switch_one(unique_id, state, delay=0):
+async def select_switch(switch, unique_id, state, delay=0):
+    if switch == 1:
+        await create_task(
+            switch_one(unique_id, state, delay)
+        )
+    elif switch == 2:
+        await create_task(
+            switch_two(unique_id, state, delay)
+        )
+    elif switch == 3:
+        await create_task(
+            switch_three(unique_id, state, delay)
+        )
+    elif switch == 4:
+        await create_task(
+            switch_four(unique_id, state, delay)
+        )
+
+
+async def switch_one(unique_id, state, delay):
     if delay:
         await sleep(delay * 60)
 
@@ -81,7 +100,7 @@ async def switch_one(unique_id, state, delay=0):
         service.status_update(unique_id, state=OFF)
 
 
-async def switch_two(unique_id, state, delay=0):
+async def switch_two(unique_id, state, delay):
     if delay:
         await sleep(delay * 60)
 
@@ -122,7 +141,7 @@ async def switch_two(unique_id, state, delay=0):
         service.status_update(unique_id, state=OFF)
 
 
-async def switch_three(unique_id, state, delay=0):
+async def switch_three(unique_id, state, delay):
     if delay:
         await sleep(delay * 60)
 
@@ -163,7 +182,7 @@ async def switch_three(unique_id, state, delay=0):
         service.status_update(unique_id, state=OFF)
 
 
-async def switch_four(unique_id, state, delay=0):
+async def switch_four(unique_id, state, delay):
     if delay:
         await sleep(delay * 60)
 

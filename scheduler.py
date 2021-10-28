@@ -17,23 +17,12 @@ async def main():
         if active_device.get("auto"):
             for device in devices:
                 if device["id"] == active_device.get("unique_id"):
-                    switch = device["switch"]
-                    if switch == 1:
-                        asyncio.create_task(
-                            raspberrypi.switch_one(device["id"], ON, delay=active_device.get("delay"))
-                        )
-                    elif switch == 2:
-                        asyncio.create_task(
-                            raspberrypi.switch_two(device["id"], ON, delay=active_device.get("delay"))
-                        )
-                    elif switch == 3:
-                        asyncio.create_task(
-                            raspberrypi.switch_three(device["id"], ON, delay=active_device.get("delay"))
-                        )
-                    elif switch == 4:
-                        asyncio.create_task(
-                            raspberrypi.switch_four(device["id"], ON, delay=active_device.get("delay"))
-                        )
+                    await raspberrypi.select_switch(
+                        switch=device["switch"],
+                        unique_id=device["id"],
+                        state=ON,
+                        delay=active_device.get("delay"),
+                    )
 
 
 if __name__ == "__main__":

@@ -74,23 +74,11 @@ async def main():
 
             for device in devices:
                 if device["id"] == message_body.get("device_id"):
-                    switch = device["switch"]
-                    if switch == 1:
-                        asyncio.create_task(
-                            raspberrypi.switch_one(device["id"], message_body.get("state"))
-                        )
-                    elif switch == 2:
-                        asyncio.create_task(
-                            raspberrypi.switch_two(device["id"], message_body.get("state"))
-                        )
-                    elif switch == 3:
-                        asyncio.create_task(
-                            raspberrypi.switch_three(device["id"], message_body.get("state"))
-                        )
-                    elif switch == 4:
-                        asyncio.create_task(
-                            raspberrypi.switch_four(device["id"], message_body.get("state"))
-                        )
+                    await raspberrypi.select_switch(
+                        switch=device["switch"],
+                        unique_id=device["id"],
+                        state=message_body.get("state"),
+                    )
 
         await sleep(1)
 
