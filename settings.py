@@ -24,3 +24,6 @@ DEVICES_URL = os.getenv("DEVICES_URL", default="https://example.com/list-devices
 # Webhook configurations
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", default="https://example.com/webhook")
 WEBHOOK_KEY = os.getenv("WEBHOOK_KEY", default="secret-key")
+
+# House code configurations
+HOUSE_CODE = os.getenv("HOUSE_CODE", default="12345")
