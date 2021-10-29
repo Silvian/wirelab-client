@@ -6,10 +6,10 @@ import boto3
 import json
 
 from asyncio import sleep
-import RPi.GPIO as GPIO
 
 import settings
 
+from pyenergenie import energenie
 from controllers import pyenergenie
 from utils.config import Config
 from utils.init import ServiceAvailability, SignalHandler
@@ -89,5 +89,5 @@ if __name__ == "__main__":
     start()
     asyncio.run(main())
     stop()
-    GPIO.cleanup()
+    energenie.cleanup()
     sys.exit(0)

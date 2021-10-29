@@ -15,18 +15,22 @@ async def switch_device(switch, unique_id, state, delay=0):
         await sleep(delay * 60)
 
     # get device
-    device = energenie.Devices.MIHO008((settings.HOUSE_CODE, switch))
+    energenie.init()
+    device = energenie.Devices.MIHO002((settings.HOUSE_CODE, switch))
 
     if state == ON:
-        await sleep(0.1)
+        await sleep(0.5)
         device.turn_on()
-        await sleep(0.25)
+        await sleep(0.5)
         # Call back and update state
         service.status_update(unique_id, state=ON)
 
     elif state == OFF:
-        await sleep(0.1)
+        await sleep(0.5)
         device.turn_off()
-        await sleep(0.25)
+        await sleep(0.5)
         # Call back and update state
         service.status_update(unique_id, state=OFF)
+
+    energenie.finished()
+    energenie.cleanup()
