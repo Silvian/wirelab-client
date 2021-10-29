@@ -1,6 +1,6 @@
 import asyncio
 
-from controllers import raspberrypi
+from controllers import pyenergenie
 from controllers.constants import ON
 from utils.config import Config
 from utils.init import ServiceAvailability
@@ -17,11 +17,13 @@ async def main():
         if active_device.get("auto"):
             for device in devices:
                 if device["id"] == active_device.get("unique_id"):
-                    await raspberrypi.select_switch(
-                        switch=device["switch"],
-                        unique_id=device["id"],
-                        state=ON,
-                        delay=active_device.get("delay"),
+                    await asyncio.create_task(
+                        pyenergenie.switch_device(
+                            switch=device["switch"],
+                            unique_id=device["id"],
+                            state=ON,
+                            delay=active_device.get("delay"),
+                        )
                     )
 
 

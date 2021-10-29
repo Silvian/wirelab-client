@@ -6,11 +6,11 @@ import boto3
 import json
 
 from asyncio import sleep
-import RPi.GPIO as GPIO
 
 import settings
 
-from controllers import raspberrypi
+from pyenergenie import energenie
+from controllers import pyenergenie
 from utils.config import Config
 from utils.init import ServiceAvailability, SignalHandler
 
@@ -74,10 +74,12 @@ async def main():
 
             for device in devices:
                 if device["id"] == message_body.get("device_id"):
-                    await raspberrypi.select_switch(
-                        switch=device["switch"],
-                        unique_id=device["id"],
-                        state=message_body.get("state"),
+                    await asyncio.create_task(
+                        pyenergenie.switch_device(
+                            switch=device["switch"],
+                            unique_id=device["id"],
+                            state=message_body.get("state"),
+                        )
                     )
 
         await sleep(1)
@@ -87,5 +89,5 @@ if __name__ == "__main__":
     start()
     asyncio.run(main())
     stop()
-    GPIO.cleanup()
+    energenie.cleanup()
     sys.exit(0)
