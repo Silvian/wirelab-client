@@ -22,6 +22,9 @@ async def switch_device(switch, unique_id, state, delay=0):
         await sleep(0.5)
         device.turn_on()
         await sleep(0.5)
+        device.turn_on()
+        await sleep(0.5)
+        device.turn_on()
         # Call back and update state
         service.status_update(unique_id, state=ON)
 
@@ -29,6 +32,9 @@ async def switch_device(switch, unique_id, state, delay=0):
         await sleep(0.5)
         device.turn_off()
         await sleep(0.5)
+        device.turn_off()
+        await sleep(0.5)
+        device.turn_off()
         # Call back and update state
         service.status_update(unique_id, state=OFF)
 
