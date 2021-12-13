@@ -12,7 +12,7 @@ import settings
 from pyenergenie import energenie
 from controllers import pyenergenie
 from utils.config import Config
-from utils.init import ServiceAvailability, SignalHandler
+from utils.handlers import ServiceAvailability, SignalHandler
 
 
 def sqs_client():

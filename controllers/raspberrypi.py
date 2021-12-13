@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 from asyncio import create_task, sleep
 
 from controllers.constants import ON, OFF
-from utils.init import ServiceAvailability
+from utils.handlers import ServiceAvailability
 
 # set the pins numbering mode
 GPIO.setmode(GPIO.BOARD)

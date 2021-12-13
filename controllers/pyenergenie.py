@@ -4,7 +4,7 @@ import settings
 
 from controllers.constants import ON, OFF
 from pyenergenie import energenie
-from utils.init import ServiceAvailability
+from utils.handlers import ServiceAvailability
 
 # service setup
 service = ServiceAvailability()

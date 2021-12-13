@@ -3,7 +3,7 @@ import asyncio
 from controllers import pyenergenie
 from controllers.constants import ON
 from utils.config import Config
-from utils.init import ServiceAvailability
+from utils.handlers import ServiceAvailability
 
 
 async def main():
