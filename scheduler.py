@@ -21,6 +21,7 @@ async def main():
                         pyenergenie.switch_device(
                             switch=device["switch"],
                             unique_id=device["id"],
+                            device_type=device["type"],
                             state=ON,
                             delay=active_device.get("delay"),
                         )

@@ -78,6 +78,7 @@ async def main():
                         pyenergenie.switch_device(
                             switch=device["switch"],
                             unique_id=device["id"],
+                            device_type=device["type"],
                             state=message_body.get("state"),
                         )
                     )

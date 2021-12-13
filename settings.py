@@ -10,6 +10,9 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 load_dotenv()
 
+# Config file:
+CONFIG_FILE = "config.json"
+
 # AWS QUEUE
 AWS_QUEUE = os.getenv("AWS_QUEUE", default="https://example.com/queue")
 

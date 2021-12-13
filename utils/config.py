@@ -5,14 +5,17 @@ import settings
 
 
 class Config:
-    CONF_FILE = "config.json"
+
+    def __init__(self, config=settings.CONFIG_FILE, root_dir=settings.ROOT_DIR):
+        self.config = config
+        self.root_dir = root_dir
 
     def load(self):
-        with open(os.path.join(settings.ROOT_DIR, self.CONF_FILE), 'r') as f:
-            config = json.load(f)
+        with open(os.path.join(self.root_dir, self.config), 'r') as file:
+            config = json.load(file)
             return config
 
     def save(self, config):
-        with open(os.path.join(settings.ROOT_DIR, self.CONF_FILE), 'w') as f:
-            json.dump(config, f)
+        with open(os.path.join(self.root_dir, self.config), 'w') as file:
+            json.dump(config, file)
             return True
