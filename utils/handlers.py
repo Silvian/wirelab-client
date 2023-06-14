@@ -5,42 +5,51 @@ import requests
 import settings
 
 
-class ServiceAvailability:
-    """Service availability status update."""
+class DeviceCatalogue:
+    """Device availability catalogue."""
 
     def __init__(
         self,
         devices_url=settings.DEVICES_URL,
-        webhook_url=settings.WEBHOOK_URL,
-        webhook_key=settings.WEBHOOK_KEY,
+        devices_key=settings.DEVICES_KEY,
     ):
         self.devices_url = devices_url
-        self.webhook_url = webhook_url
-        self.webhook_key = webhook_key
+        self.devices_key = devices_key
 
-    def status_update(self, unique_id, state=None, active=None):
-        response = requests.post(
-            url=self.webhook_url,
-            headers={
-                'Content-Type': 'application/json',
-                'X-API-KEY': self.webhook_key,
-            },
-            json={
-                'unique_id': unique_id,
-                'state': state,
-                'active': active,
-            }
-        ).json()
-
-        return response
-
-    def list_active_devices(self):
+    def list_devices(self):
         response = requests.get(
             url=self.devices_url,
             headers={
                 'Content-Type': 'application/json',
-                'X-API-KEY': self.webhook_key,
+                'X-API-KEY': self.devices_key,
             },
+        ).json()
+
+        return response
+
+
+class ServiceCheck:
+    """Service check status update."""
+
+    def __init__(
+        self,
+        status_url=settings.STATUS_URL,
+        status_key=settings.STATUS_KEY,
+    ):
+        self.status_url = status_url
+        self.status_key = status_key
+
+    def status_update(self, device_id, state):
+        response = requests.post(
+            url=self.status_url,
+            headers={
+                'Content-Type': 'application/json',
+                'X-API-KEY': self.status_key,
+            },
+            json={
+                'device_id': device_id,
+                'state': state,
+            }
         ).json()
 
         return response

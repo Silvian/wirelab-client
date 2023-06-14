@@ -11,8 +11,7 @@ import settings
 
 from pyenergenie import energenie
 from controllers import pyenergenie
-from utils.config import Config
-from utils.handlers import ServiceAvailability, SignalHandler
+from utils.handlers import DeviceCatalogue, SignalHandler
 
 
 def sqs_client():
@@ -27,24 +26,17 @@ def sqs_client():
 
 
 def start():
-    service = ServiceAvailability()
-    config_file = Config()
-    for device in config_file.load().get("devices"):
-        service.status_update(device["id"], active=True)
+    pass
 
 
 def stop():
-    service = ServiceAvailability()
-    config_file = Config()
-    for device in config_file.load().get("devices"):
-        service.status_update(device["id"], active=False)
+    pass
 
 
 async def main():
     sqs = sqs_client()
-    config_file = Config()
-    config = config_file.load()
-    devices = config.get("devices")
+    device_catalogue = DeviceCatalogue()
+    devices = device_catalogue.list_devices()
     handler = SignalHandler()
 
     while not handler.kill:
@@ -73,11 +65,11 @@ async def main():
             )
 
             for device in devices:
-                if device["id"] == message_body.get("device_id"):
+                if device["device_id"] == message_body.get("device_id"):
                     await asyncio.create_task(
                         pyenergenie.switch_device(
                             switch=device["switch"],
-                            unique_id=device["id"],
+                            device_id=device["device_id"],
                             device_type=device["type"],
                             state=message_body.get("state"),
                         )

@@ -23,10 +23,11 @@ AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY", default="AWS_SECRET_KEY")
 
 # Devices configurations
 DEVICES_URL = os.getenv("DEVICES_URL", default="https://example.com/list-devices")
+DEVICES_KEY = os.getenv("DEVICES_KEY", default="secret-key")
 
-# Webhook configurations
-WEBHOOK_URL = os.getenv("WEBHOOK_URL", default="https://example.com/webhook")
-WEBHOOK_KEY = os.getenv("WEBHOOK_KEY", default="secret-key")
+# Status configuration
+STATUS_URL = os.getenv("STATUS_URL", default="https://example.com/update-status")
+STATUS_KEY = os.getenv("STATUS_KEY", default="secret-key")
 
 # House code configurations
 HOUSE_CODE = os.getenv("HOUSE_CODE", default="12345")
