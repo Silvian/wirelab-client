@@ -4,13 +4,13 @@ import settings
 
 from controllers.constants import ON, OFF
 from pyenergenie import energenie
-from utils.handlers import ServiceAvailability
+from utils.handlers import ServiceCheck
 
 # service setup
-service = ServiceAvailability()
+service = ServiceCheck()
 
 
-async def switch_device(switch, unique_id, device_type, state, delay=0):
+async def switch_device(switch, device_id, device_type, state, delay=0):
     if delay:
         await sleep(delay * 60)
 
@@ -32,7 +32,7 @@ async def switch_device(switch, unique_id, device_type, state, delay=0):
         await sleep(0.5)
         device.turn_on()
         # Call back and update state
-        service.status_update(unique_id, state=ON)
+        service.status_update(device_id, state=ON)
 
     elif state == OFF:
         await sleep(0.5)
@@ -42,7 +42,7 @@ async def switch_device(switch, unique_id, device_type, state, delay=0):
         await sleep(0.5)
         device.turn_off()
         # Call back and update state
-        service.status_update(unique_id, state=OFF)
+        service.status_update(device_id, state=OFF)
 
     energenie.finished()
     energenie.cleanup()
