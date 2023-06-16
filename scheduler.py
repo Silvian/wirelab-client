@@ -14,7 +14,7 @@ async def main():
             await asyncio.create_task(
                 pyenergenie.switch_device(
                     switch=device["switch"],
-                    device_id=device["id"],
+                    device_id=device["device_id"],
                     device_type=device["type"],
                     state=ON,
                 )
