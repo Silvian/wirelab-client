@@ -20,8 +20,8 @@ class DeviceCatalogue:
         response = requests.get(
             url=self.devices_url,
             headers={
-                'Content-Type': 'application/json',
-                'X-API-KEY': self.devices_key,
+                "Content-Type": "application/json",
+                "X-API-KEY": self.devices_key,
             },
         ).json()
 
@@ -43,12 +43,12 @@ class ServiceCheck:
         response = requests.post(
             url=self.status_url,
             headers={
-                'Content-Type': 'application/json',
-                'X-API-KEY': self.status_key,
+                "Content-Type": "application/json",
+                "X-API-KEY": self.status_key,
             },
             json={
-                'device_id': device_id,
-                'state': state,
+                "device_id": device_id,
+                "state": state,
             }
         ).json()
 
