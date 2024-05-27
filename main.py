@@ -17,7 +17,7 @@ from utils.handlers import DeviceCatalogue, SignalHandler
 def sqs_client():
     """Create SQS client"""
     sqs = boto3.client(
-        'sqs',
+        "sqs",
         region_name=settings.AWS_REGION_NAME,
         aws_access_key_id=settings.AWS_ACCESS_KEY,
         aws_secret_access_key=settings.AWS_SECRET_KEY,
@@ -43,20 +43,21 @@ async def main():
         response = sqs.receive_message(
             QueueUrl=settings.AWS_QUEUE,
             AttributeNames=[
-                'SentTimestamp'
+                "SentTimestamp"
             ],
             MaxNumberOfMessages=1,
             MessageAttributeNames=[
-                'All'
+                "All"
             ],
             VisibilityTimeout=0,
             WaitTimeSeconds=20
         )
 
         if "Messages" in response:
-            message = response['Messages'][0]
-            receipt_handle = message['ReceiptHandle']
+            message = response["Messages"][0]
+            receipt_handle = message["ReceiptHandle"]
             message_body = json.loads(message["Body"])
+            message_data = json.loads(message_body["Message"])
 
             # Delete received message from queue
             sqs.delete_message(
@@ -65,13 +66,13 @@ async def main():
             )
 
             for device in devices:
-                if device["device_id"] == message_body.get("device_id"):
+                if device["device_id"] == message_data.get("device_id"):
                     await asyncio.create_task(
                         pyenergenie.switch_device(
                             switch=device["switch"],
                             device_id=device["device_id"],
                             device_type=device["type"],
-                            state=message_body.get("state"),
+                            state=message_data.get("state"),
                         )
                     )
 
